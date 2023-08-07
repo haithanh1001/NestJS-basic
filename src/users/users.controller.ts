@@ -31,17 +31,29 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    let user = await this.usersService.findOne(id);
+    return {
+      EC: 0,
+      data: user,
+    };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Patch()
+  async update(@Body() updateUserDto: UpdateUserDto) {
+    let result = await this.usersService.update(updateUserDto);
+    return {
+      EC: 0,
+      data: result,
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    let result = await this.usersService.remove(id);
+    return {
+      EC: 0,
+      data: result,
+    };
   }
 }
