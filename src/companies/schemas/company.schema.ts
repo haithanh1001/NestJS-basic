@@ -10,7 +10,7 @@ export class Company {
   @Prop()
   address: string;
   @Prop()
-  description: number;
+  description: string;
   @Prop({ type: Object })
   createdBy: {
     _id: mongoose.Schema.Types.ObjectId;

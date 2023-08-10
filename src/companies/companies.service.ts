@@ -9,11 +9,11 @@ import { Company, CompanyDocument } from './schemas/company.schema';
 export class CompaniesService {
   constructor(
     @InjectModel(Company.name)
-    private userModel: SoftDeleteModel<CompanyDocument>,
+    private companyModel: SoftDeleteModel<CompanyDocument>,
   ) {}
 
-  create(createCompanyDto: CreateCompanyDto) {
-    return 'This action adds a new company';
+  async create(createCompanyDto: CreateCompanyDto) {
+    return await this.companyModel.create({ ...createCompanyDto });
   }
 
   findAll() {
