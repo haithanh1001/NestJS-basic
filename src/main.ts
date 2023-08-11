@@ -20,7 +20,7 @@ async function bootstrap() {
 
   //config cors
   app.enableCors({
-    origin: 'http://127.0.0.1:3000',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
   });
