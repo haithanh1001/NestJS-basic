@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { User } from 'src/decorator/customize';
+import { ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -32,6 +32,7 @@ export class CompaniesController {
   }
 
   @Get()
+  @ResponseMessage('Fetch list Company with paginate')
   async findAll(
     @Query('page') currentPage: string,
     @Query('limit') limit: string,
