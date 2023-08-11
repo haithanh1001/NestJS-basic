@@ -7,8 +7,12 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { User } from 'src/decorator/customize';
+import { IUser } from 'src/users/users.interface';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -19,8 +23,11 @@ export class CompaniesController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createCompanyDto: CreateCompanyDto) {
-    return await this.companiesService.create(createCompanyDto);
+  async create(
+    @Body() createCompanyDto: CreateCompanyDto,
+    @User() user: IUser,
+  ) {
+    return await this.companiesService.create(createCompanyDto, user);
   }
 
   @Get()
