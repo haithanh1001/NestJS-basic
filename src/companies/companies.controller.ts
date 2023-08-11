@@ -49,9 +49,9 @@ export class CompaniesController {
   ) {
     return await this.companiesService.update(id, updateCompanyDto, user);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companiesService.remove(+id);
+  async remove(@Param('id') id: string, @User() user: IUser) {
+    return await this.companiesService.remove(id, user);
   }
 }
