@@ -44,10 +44,10 @@ export class CompaniesService {
 
     return {
       meta: {
-        current: currentPage, //trang hiện tại
+        currentPage: currentPage, //trang hiện tại
         pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages, //tổng số trang với điều kiện query
-        total: totalItems, // tổng số phần tử (số bản ghi)
+        totalPages: totalPages, //tổng số trang với điều kiện query
+        totalItems: totalItems, // tổng số phần tử (số bản ghi)
       },
       result, //kết quả query
     };

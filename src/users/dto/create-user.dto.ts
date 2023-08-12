@@ -12,9 +12,9 @@ import {
 import { Type } from 'class-transformer';
 
 class Company {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Id cua cong ty khong duoc de trong' })
   _id: mongoose.Schema.Types.ObjectId;
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Ten cong ty khong duoc de trong' })
   name: string;
 }
 export class CreateUserDto {

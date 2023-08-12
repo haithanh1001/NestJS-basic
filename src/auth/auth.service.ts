@@ -1,7 +1,9 @@
+import { RegisterUserDto } from './../users/dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/users/users.interface';
+import { genSaltSync, hashSync } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -42,5 +44,14 @@ export class AuthService {
       email,
       role,
     };
+  }
+  async registerUserService(registerUserDto: RegisterUserDto) {
+    let user = await this.usersService.registerUserService(registerUserDto);
+    if (user) {
+      return {
+        _id: user._id,
+        createdAt: user.createdAt,
+      };
+    }
   }
 }
