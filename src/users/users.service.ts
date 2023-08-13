@@ -9,6 +9,7 @@ import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from './users.interface';
 import aqp from 'api-query-params';
+import { async } from 'rxjs';
 @Injectable()
 export class UsersService {
   constructor(
@@ -144,5 +145,9 @@ export class UsersService {
   }
   updateUserToken = async (refreshToken: string, _id: string) => {
     return await this.userModel.updateOne({ _id }, { refreshToken });
+  };
+
+  findUserByToken = async (refreshToken: string) => {
+    return await this.userModel.findOne({ refreshToken }).select('-password');
   };
 }
