@@ -6,6 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { TransformInterceptor } from './core/transform.interceptor';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -19,6 +20,8 @@ async function bootstrap() {
   app.setViewEngine('ejs'); //set view engine
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor(reflector));
+  //config cookie
+  app.use(cookieParser());
   //config cors
   app.enableCors({
     origin: '*',
