@@ -57,4 +57,13 @@ export class AuthController {
 
     return this.authService.processNewToken(refresh_token, response);
   }
+
+  @ResponseMessage('logout user')
+  @Post('/logout')
+  async handleLogout(
+    @User() user: IUser,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.logout(user, response);
+  }
 }

@@ -34,8 +34,8 @@ export class CompaniesController {
   @Get()
   @ResponseMessage('Fetch list Company with paginate')
   async findAll(
-    @Query('page') currentPage: string,
-    @Query('limit') limit: string,
+    @Query('current') currentPage: string,
+    @Query('pageSize') limit: string,
     @Query() qs: string,
   ) {
     return await this.companiesService.findAll(+currentPage, +limit, qs);
