@@ -13,6 +13,7 @@ import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
+import mongoose from 'mongoose';
 
 @Controller('jobs')
 export class JobsController {
@@ -40,6 +41,9 @@ export class JobsController {
   @ResponseMessage('Fetch a job by id')
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return 'not found job';
+    }
     return this.jobsService.findOne(id);
   }
   @ResponseMessage('Update a job')

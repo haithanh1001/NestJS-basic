@@ -72,6 +72,15 @@ export class JobsService {
   }
 
   async remove(id: string, user: IUser) {
+    await this.jobModel.updateOne(
+      { _id: id },
+      {
+        deletedBy: {
+          _id: user._id,
+          email: user.email,
+        },
+      },
+    );
     let result = await this.jobModel.softDelete({ _id: id });
     return result;
   }
