@@ -26,15 +26,26 @@ export class JobsService {
     return `This action returns all jobs`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} job`;
+  async findOne(id: string) {
+    return await this.jobModel.findOne({ _id: id });
   }
 
-  update(id: number, updateJobDto: UpdateJobDto) {
-    return `This action updates a #${id} job`;
+  async update(id: string, updateJobDto: UpdateJobDto, user: IUser) {
+    let result = await this.jobModel.updateOne(
+      { _id: id },
+      {
+        ...updateJobDto,
+        updatedBy: {
+          _id: user._id,
+          email: user.email,
+        },
+      },
+    );
+    return result;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} job`;
+  async remove(id: string, user: IUser) {
+    let result = await this.jobModel.softDelete({ _id: id });
+    return result;
   }
 }
