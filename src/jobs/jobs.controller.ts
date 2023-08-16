@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
@@ -27,10 +28,14 @@ export class JobsController {
       };
     }
   }
-
+  @ResponseMessage('Fetch all jobs with paginate')
   @Get()
-  findAll() {
-    return this.jobsService.findAll();
+  findAll(
+    @Query('current') page: string,
+    @Query('pageSize') limit: string,
+    @Query() qs: string,
+  ) {
+    return this.jobsService.findAll(+page, +limit, qs);
   }
   @ResponseMessage('Fetch a job by id')
   @Get(':id')
