@@ -1,34 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ResumesService } from './resumes.service';
-import { CreateResumeDto } from './dto/create-resume.dto';
+import { CreateResumeDto, CreateUserCvDto } from './dto/create-resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
+import { ResponseMessage, User } from 'src/decorator/customize';
+import { IUser } from 'src/users/users.interface';
 
 @Controller('resumes')
 export class ResumesController {
   constructor(private readonly resumesService: ResumesService) {}
-
+  @ResponseMessage('Create a new resume')
   @Post()
-  create(@Body() createResumeDto: CreateResumeDto) {
-    return this.resumesService.create(createResumeDto);
+  async create(@Body() createUserCvDto: CreateUserCvDto, @User() user: IUser) {
+    let result = await this.resumesService.create(createUserCvDto, user);
+    return result;
   }
-
+  @ResponseMessage('Fetch all resumes with paginate')
   @Get()
-  findAll() {
-    return this.resumesService.findAll();
+  async findAll(
+    @Query('current') page: string,
+    @Query('pageSize') limit: string,
+    @Query() qs: string,
+  ) {
+    return await this.resumesService.findAll(+page, +limit, qs);
   }
-
+  @ResponseMessage('Fetch a resume by id')
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.resumesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.resumesService.findOne(id);
   }
-
+  @ResponseMessage('Update status resume')
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateResumeDto: UpdateResumeDto) {
-    return this.resumesService.update(+id, updateResumeDto);
+  async update(
+    @Param('id') id: string,
+    @Body('status') status: string,
+    @User() user: IUser,
+  ) {
+    return await this.resumesService.update(id, status, user);
   }
-
+  @ResponseMessage('Delete a resume by id')
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.resumesService.remove(+id);
+  async remove(@Param('id') id: string, @User() user: IUser) {
+    return await this.resumesService.remove(id, user);
+  }
+  @ResponseMessage('Get Resumes By User')
+  @Post('/by-user')
+  async handleGetAllResumesByUser(@User() user: IUser) {
+    return await this.resumesService.getAllResumesByUser(user);
   }
 }
