@@ -7,24 +7,20 @@ export type JobDocument = HydratedDocument<Job>;
 export class Job {
   @Prop()
   name: string;
-
   @Prop()
   skills: string[];
-
   @Prop({ type: Object })
   company: {
     _id: mongoose.Schema.Types.ObjectId;
     name: string;
+    logo: string;
   };
-
   @Prop()
   location: string;
-
   @Prop()
   salary: number;
   @Prop()
   quantity: number;
-
   @Prop()
   level: string;
   @Prop()
@@ -35,7 +31,6 @@ export class Job {
   endDate: Date;
   @Prop()
   isActive: boolean;
-
   @Prop({ type: Object })
   createdBy: {
     _id: mongoose.Schema.Types.ObjectId;
@@ -51,7 +46,6 @@ export class Job {
     _id: mongoose.Schema.Types.ObjectId;
     email: string;
   };
-
   @Prop()
   createdAt: Date;
   @Prop()

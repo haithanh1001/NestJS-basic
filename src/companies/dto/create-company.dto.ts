@@ -7,4 +7,6 @@ export class CreateCompanyDto {
   address: string;
   @IsNotEmpty({ message: 'Mo ta cong ty khong duoc de trong' })
   description: string;
+  @IsNotEmpty({ message: 'Logo cong ty khong duoc de trong' })
+  logo: string;
 }

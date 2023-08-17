@@ -11,7 +11,7 @@ import {
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
-import { ResponseMessage, User } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 import mongoose from 'mongoose';
 
@@ -30,6 +30,7 @@ export class JobsController {
     }
   }
   @ResponseMessage('Fetch all jobs with paginate')
+  @Public()
   @Get()
   findAll(
     @Query('current') page: string,
@@ -39,6 +40,7 @@ export class JobsController {
     return this.jobsService.findAll(+page, +limit, qs);
   }
   @ResponseMessage('Fetch a job by id')
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) {

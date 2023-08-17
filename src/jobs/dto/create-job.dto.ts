@@ -21,6 +21,8 @@ class Company {
   _id: mongoose.Schema.Types.ObjectId;
   @IsNotEmpty({ message: 'Ten cong ty khong duoc de trong' })
   name: string;
+  @IsNotEmpty({ message: 'Logo khong duoc de trong' })
+  logo: string;
 }
 export class CreateJobDto {
   @IsNotEmpty({ message: 'Name khong duoc de trong' })
@@ -31,8 +33,7 @@ export class CreateJobDto {
   @MinLength(3, { each: true, message: 'Skill khong hop le' })
   skills: string[];
 
-  // @IsNotEmpty({ message: 'Location khong duoc de trong' })
-  @Prop()
+  @IsNotEmpty({ message: 'Location khong duoc de trong' })
   location: string;
   @IsNotEmpty({ message: 'Salary khong duoc de trong' })
   salary: number;
@@ -54,6 +55,7 @@ export class CreateJobDto {
   endDate: Date;
   @IsNotEmpty({ message: 'Is active khong duoc de trong' })
   isActive: boolean;
+
   @IsNotEmptyObject()
   @IsObject()
   @ValidateNested()
