@@ -42,8 +42,8 @@ export class CompaniesController {
   }
   @Public()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.companiesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.companiesService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
