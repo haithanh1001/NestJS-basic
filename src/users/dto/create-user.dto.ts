@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { Prop, Schema } from '@nestjs/mongoose';
 import {
   IsEmail,
+  IsMongoId,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
@@ -32,8 +33,8 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Address khong duoc de trong' })
   address: string;
   @IsNotEmpty({ message: 'Role khong duoc de trong' })
-  @Prop()
-  role: string;
+  @IsMongoId({ message: 'Role co dinh dang la ObjectId' })
+  role: mongoose.Schema.Types.ObjectId;
 
   @IsNotEmptyObject()
   @IsObject()

@@ -99,16 +99,25 @@ export class UsersService {
       .findOne({
         _id: id,
       })
-      .select('-password');
+      .select('-password')
+      .populate({
+        path: 'role',
+        select: {
+          name: 1,
+          _id: 1,
+        },
+      });
     return user;
     // let { password, ...data } = user._doc;
     // return data;
   }
 
   async findOneByUsername(username: string) {
-    return await this.userModel.findOne({
-      email: username,
-    });
+    return await this.userModel
+      .findOne({
+        email: username,
+      })
+      .populate({ path: 'role', select: { name: 1, permissions: 1 } });
   }
 
   isValidPassword(password: string, hash: string) {
@@ -130,6 +139,10 @@ export class UsersService {
   }
 
   async remove(id: string, user: IUser) {
+    const foundUser = await this.userModel.findById(id);
+    if (foundUser.email === 'admin@gmail.com') {
+      throw new BadRequestException('Khong the xoa tai khoan admin!');
+    }
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return 'not found user';
     }
