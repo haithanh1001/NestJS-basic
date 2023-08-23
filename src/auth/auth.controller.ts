@@ -10,6 +10,7 @@ import {
 import { Request, Response } from 'express';
 import { get } from 'http';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
+import { RolesService } from 'src/roles/roles.service';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { IUser } from 'src/users/users.interface';
 import { AuthService } from './auth.service';
@@ -18,7 +19,10 @@ import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private rolesService: RolesService,
+  ) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
@@ -42,6 +46,8 @@ export class AuthController {
   @ResponseMessage('get user information')
   @Get('/account')
   async handleGetAccount(@User() user: IUser) {
+    const temp = (await this.rolesService.findOne(user.role._id)) as any;
+    user.permissions = temp.permissions;
     return {
       user,
     };

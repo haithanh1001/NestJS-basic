@@ -10,10 +10,13 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from './users.interface';
 import aqp from 'api-query-params';
 import { async } from 'rxjs';
+import { Role, RoleDocument } from 'src/roles/schemas/role.schema';
+import { USER_ROLE } from 'src/databases/sample';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: SoftDeleteModel<UserDocument>,
+    @InjectModel(Role.name) private roleModel: SoftDeleteModel<RoleDocument>,
   ) {}
 
   // create(createUserDto: CreateUserDto) {
@@ -52,11 +55,14 @@ export class UsersService {
         `Email: ${email} da ton tai trong he thong! Vui long su dung email khac!`,
       );
     }
+    //fetch user role
+    const userRole = await this.roleModel.findOne({ name: USER_ROLE });
     const hash_password = this.getHashPassword(password);
     const user = await this.userModel.create({
       ...registerUserDto,
       password: hash_password,
-      role: 'USER',
+      //role: 'USER',
+      role: userRole?._id,
     });
     return user;
   }
@@ -117,7 +123,7 @@ export class UsersService {
       .findOne({
         email: username,
       })
-      .populate({ path: 'role', select: { name: 1, permissions: 1 } });
+      .populate({ path: 'role', select: { name: 1 } });
   }
 
   isValidPassword(password: string, hash: string) {
@@ -162,6 +168,11 @@ export class UsersService {
   };
 
   findUserByToken = async (refreshToken: string) => {
-    return await this.userModel.findOne({ refreshToken }).select('-password');
+    return await (
+      await this.userModel.findOne({ refreshToken })
+    ).populate({
+      path: 'role',
+      select: { name: 1 },
+    });
   };
 }
