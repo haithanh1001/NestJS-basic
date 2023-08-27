@@ -72,18 +72,9 @@ export class SubscribersService {
     return await this.subscribersModel.findOne({ _id });
   }
 
-  async update(
-    _id: string,
-    updateSubscriberDto: UpdateSubscriberDto,
-    user: IUser,
-  ) {
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-      throw new BadRequestException(
-        'Id khong hop le, id phai co dang ObjectId',
-      );
-    }
-    return await this.subscribersModel.updateOne(
-      { _id },
+  async update(updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
+    const updated = await this.subscribersModel.updateOne(
+      { email: user.email },
       {
         ...updateSubscriberDto,
         updatedBy: {
@@ -91,7 +82,9 @@ export class SubscribersService {
           email: user.email,
         },
       },
+      { upsert: true },
     );
+    return updated;
   }
 
   async remove(_id: string, user: IUser) {
@@ -110,5 +103,9 @@ export class SubscribersService {
       },
     );
     return await this.subscribersModel.softDelete({ _id });
+  }
+  async getSkills(user: IUser) {
+    const { email } = user;
+    return await this.subscribersModel.findOne({ email }, { skills: 1 });
   }
 }

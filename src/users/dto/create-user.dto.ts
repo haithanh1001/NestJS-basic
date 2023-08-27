@@ -8,9 +8,11 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 class Company {
   @IsNotEmpty({ message: 'Id cua cong ty khong duoc de trong' })
@@ -58,4 +60,18 @@ export class RegisterUserDto {
   gender: string;
   @IsNotEmpty({ message: 'Address khong duoc de trong' })
   address: string;
+}
+
+export class UserLoginDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: 'user@gmail.com' })
+  readonly username: string;
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '123456',
+    description: 'password',
+  })
+  readonly password: string;
 }

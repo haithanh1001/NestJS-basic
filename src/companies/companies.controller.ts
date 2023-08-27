@@ -10,6 +10,7 @@ import {
   Req,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
@@ -17,7 +18,7 @@ import { IUser } from 'src/users/users.interface';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-
+@ApiTags('companies')
 @Controller('companies')
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}

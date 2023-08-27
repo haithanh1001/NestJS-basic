@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { Public, ResponseMessage } from 'src/decorator/customize';
 import { MailService } from './mail.service';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -9,8 +9,12 @@ import {
 } from 'src/subscribers/schemas/subscriber.schema';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { Job, JobDocument } from 'src/jobs/schemas/job.schema';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('mail')
 @Controller('mail')
 export class MailController {
+  private readonly logger = new Logger(MailController.name);
   constructor(
     private readonly mailService: MailService,
     private mailerService: MailerService,
@@ -19,6 +23,12 @@ export class MailController {
     @InjectModel(Job.name)
     private jobModel: SoftDeleteModel<JobDocument>,
   ) {}
+
+  // @Cron(CronExpression.EVERY_5_SECONDS)
+  // testCron() {
+  //   this.logger.log('>>> call me!');
+  // }
+
   @Get()
   @Public()
   @ResponseMessage('Test email')

@@ -11,9 +11,14 @@ import {
 import { SubscribersService } from './subscribers.service';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { UpdateSubscriberDto } from './dto/update-subscriber.dto';
-import { ResponseMessage, User } from 'src/decorator/customize';
+import {
+  ResponseMessage,
+  SkipCheckPermission,
+  User,
+} from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('subscribers')
 @Controller('subscribers')
 export class SubscribersController {
   constructor(private readonly subscribersService: SubscribersService) {}
@@ -43,14 +48,21 @@ export class SubscribersController {
     return await this.subscribersService.findOne(id);
   }
 
-  @Patch(':id')
-  @ResponseMessage('Update a subscriber by id')
+  @Post('skills')
+  @ResponseMessage("Get subscriber's skill")
+  @SkipCheckPermission()
+  getUserSkills(@User() user: IUser) {
+    return this.subscribersService.getSkills(user);
+  }
+
+  @Patch()
+  @SkipCheckPermission()
+  @ResponseMessage('Update a subscriber')
   async update(
-    @Param('id') id: string,
     @Body() updateSubscriberDto: UpdateSubscriberDto,
     @User() user: IUser,
   ) {
-    return await this.subscribersService.update(id, updateSubscriberDto, user);
+    return await this.subscribersService.update(updateSubscriberDto, user);
   }
 
   @Delete(':id')
